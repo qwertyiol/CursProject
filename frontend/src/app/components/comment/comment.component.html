@@ -1,0 +1,16 @@
+<div class="container"  *ngFor="let comment of comments">
+<div class="row">
+  <div class="col-md-3">
+    <strong class="d-inline-block mb-10 text-dark">{{comment.userByIdUser?.username}}</strong>
+  </div>
+  <div class="col-md-3">
+    <div class="container mb-auto">{{comment.tex}}</div>
+  </div>
+  <div class="col-md-3">
+    <div class="mb-1 text-muted">{{comment.dataPost | date}}</div>
+  </div>
+  <div class="col-md-3">
+    <button class="btn btn-light btnp" (click)="_deleteComment(comment.id)">Удалить</button>
+  </div>
+</div>
+</div>

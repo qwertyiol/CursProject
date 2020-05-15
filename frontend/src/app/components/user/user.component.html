@@ -1,0 +1,40 @@
+<app-header></app-header>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <img alt="Фото профиля" class="rounded-circle" src="http://s41.radikal.ru/i092/1304/70/81cc2c352edf.jpg"
+           width="150" height="150">
+    </div>
+    <div class="col">
+      <h4 class="h4 mb-3 font-weight-normal">{{userService.currUser.username}}</h4>
+      <br>
+      <!--<div class="row">
+        <div class="col">Публикации:</div>
+        <div class="col">Подписчики:</div>
+        <div class="col">Подписки:</div>
+      </div>-->
+      <div class="row">
+        <div class="col">
+          <br>
+          <h4 class="h4 mb-3 font-weight-light">{{userService.currUser.flName}}</h4>
+        </div>
+      </div>
+      <div class="row">
+        <!--<div class="col">
+          <button class="btn btn-outline-success">Подписаться</button>
+        </div>-->
+      </div>
+    </div>
+    <div class="col">
+      <button type="button" class="btn btn-default" routerLink="/edit">Редактировать профиль</button>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container">
+  <app-post [selectedUser]="userService.currUser"></app-post>
+</div>
+
+
+
