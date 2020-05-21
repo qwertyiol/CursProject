@@ -4,6 +4,7 @@ import com.netcracker.curs.backend.entity.UserEntity;
 import com.netcracker.curs.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -13,6 +14,9 @@ import java.util.Optional;
 public class UserController {
 
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
 
     @Autowired
     public UserController(UserService userService) {
@@ -40,8 +44,10 @@ public class UserController {
         return userService.getAllUser();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public UserEntity saveUser(@RequestBody UserEntity user) {
+    @RequestMapping(value = "/registration",method = RequestMethod.POST)
+    public UserEntity saveUser(@RequestBody UserEntity user)
+    {
+        user.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userService.save(user);
     }
 

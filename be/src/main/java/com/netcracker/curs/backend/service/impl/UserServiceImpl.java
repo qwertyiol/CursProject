@@ -42,4 +42,9 @@ public class UserServiceImpl implements UserService {
     public UserEntity findByUsernameAndPassword(String username, String password) {
         return repository.findByUsernameAndPassword(username, password);
     }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
 }

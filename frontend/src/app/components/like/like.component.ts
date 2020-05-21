@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Post} from "../../models/Post";
 import {Subscription} from "rxjs";
 import {Like} from "../../models/Like";
-import {UserService} from "../../services/user.service";
+import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
 import {LikeService} from "../../services/like.service";
 import {Comment} from "../../models/Comment";
@@ -17,7 +17,7 @@ export class LikeComponent implements OnInit {
   public likes: Like[];
   private subscriptions: Subscription[] = [];
 
-  constructor(private userService: UserService,
+  constructor(private AuthenticationService: AuthenticationService,
               private likeService: LikeService) { }
 
   ngOnInit() {

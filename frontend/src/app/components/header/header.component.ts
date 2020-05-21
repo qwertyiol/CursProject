@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../../services/user.service";
+import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
 import {Post} from "../../models/Post";
 import {User} from "../../models/User";
@@ -11,14 +11,14 @@ import {User} from "../../models/User";
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private  userService: UserService,
+  constructor(private  authService: AuthenticationService,
               private router: Router) { }
 
   ngOnInit() {
   }
 
   logoutUser(){
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.router.navigate(['/entry'])
   }
 }

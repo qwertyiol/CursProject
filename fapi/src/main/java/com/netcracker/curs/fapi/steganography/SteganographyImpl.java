@@ -80,8 +80,9 @@ public class SteganographyImpl {
     }
 
 
-    public byte[] showMessage(File imgFile) {
+    public String showMessage(File imgFile) {
         BufferedImage im = null;
+        String s = null;
         try {
             im = ImageIO.read(imgFile);
             WritableRaster raster = im.getRaster();
@@ -121,14 +122,13 @@ public class SteganographyImpl {
             System.out.println();
             System.out.println("Encrypted data length is: " + len);
             System.out.println("hiddenbytes"+hiddenBytes);
-            String s = new String(hiddenBytes);
+            s = new String(hiddenBytes);
             System.out.println("hiddenMessage: "+s);
 
         } catch (Exception e) {
-            Component veiw = null;
-            throw new NegativeArraySizeException("ERROR! Please Try Again");
+           return null;
         }
-        return hiddenBytes;
+        return s;
     }
 
     public byte[] intToBytes(int num, int numBytes) {

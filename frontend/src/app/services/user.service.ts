@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {User} from "../models/User";
 
 @Injectable()
-export class UserService{
+export class AuthenticationService{
 
   public enteredText: string;
 

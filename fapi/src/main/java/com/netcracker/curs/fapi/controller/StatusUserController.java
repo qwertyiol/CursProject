@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -14,14 +15,17 @@ public class StatusUserController {
     @Autowired
     private StatusUserService statusUserService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @RequestMapping
     public ResponseEntity<List<StatusUser>> getAllStatusUser() {
-        return ResponseEntity.ok(statusUserService.getAll());
+        return ResponseEntity.ok(statusUserService.getAll(request));
     }
 
     @RequestMapping(value = "/{id}")
     public ResponseEntity<StatusUser> getAllStatusUser(@PathVariable String id) throws InterruptedException {
         int statusUserId = Integer.parseInt(id);
-        return ResponseEntity.ok(statusUserService.getStatusUserById(statusUserId));
+        return ResponseEntity.ok(statusUserService.getStatusUserById(statusUserId, request));
     }
 }

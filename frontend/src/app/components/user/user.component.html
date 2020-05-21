@@ -7,7 +7,7 @@
            width="150" height="150">
     </div>
     <div class="col">
-      <h4 class="h4 mb-3 font-weight-normal">{{userService.currUser.username}}</h4>
+      <h4 *ngIf="authService.currUser" class="h4 mb-3 font-weight-normal">{{authService.currUser.username}}</h4>
       <br>
       <!--<div class="row">
         <div class="col">Публикации:</div>
@@ -17,7 +17,7 @@
       <div class="row">
         <div class="col">
           <br>
-          <h4 class="h4 mb-3 font-weight-light">{{userService.currUser.flName}}</h4>
+          <h4 *ngIf="authService.currUser" class="h4 mb-3 font-weight-light">{{authService.currUser.flName}}</h4>
         </div>
       </div>
       <div class="row">
@@ -33,7 +33,7 @@
 </div>
 <br>
 <div class="container">
-  <app-post [selectedUser]="userService.currUser"></app-post>
+  <app-post [selectedUser]="authService.currUser"></app-post>
 </div>
 
 

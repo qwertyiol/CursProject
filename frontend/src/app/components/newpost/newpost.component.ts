@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {PostService} from "../../services/post.service";
-import {Subscription} from "rxjs";
-import {Post} from "../../models/Post";
-import {Router} from "@angular/router";
-import {flatMap, skip, switchMapTo, take} from "rxjs/operators";
-import {UserService} from "../../services/user.service";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { PostService } from "../../services/post.service";
+import { Subscription } from "rxjs";
+import { Post } from "../../models/Post";
+import { Router } from "@angular/router";
+import { flatMap, skip, switchMapTo, take } from "rxjs/operators";
+import { AuthenticationService } from "../../services/authentication.service";
 
 @Component({
   selector: 'app-newpost',
@@ -20,14 +20,14 @@ export class NewpostComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   public editablePost: Post = new Post();
   constructor(private postService: PostService,
-              private userService: UserService,
-              private http: HttpClient,
-              private router: Router) {
+    private AuthenticationService: AuthenticationService,
+    private http: HttpClient,
+    private router: Router) {
   }
 
   ngOnInit() {
     this.editablePost.datePost = Date.now();
-    this.editablePost.idUser = this.userService.currUser.id;
+    this.editablePost.idUser = this.AuthenticationService.currUser.id;
   }
 
   onFileSelected(event) {
@@ -36,20 +36,21 @@ export class NewpostComponent implements OnInit {
 
   public _updatePost(): void {
     this.loadPost();
-    this.editablePost.idUser = this.userService.currUser.id;
+    this.editablePost.idUser = this.AuthenticationService.currUser.id;
   }
 
   public _addPost(): void {
-    debugger;
-    this.postService.savePost(this.editablePost)
-      .pipe(
-        flatMap((post: Post) => this.postService.putFileToPostByPostId(post.id, this.selectedFile)),
-        skip(4)
-      )
-      .subscribe(post => {
-        console.log(post);
-        this.router.navigate(['/']);
+    this.postService.savePost(this.editablePost).subscribe((post: Post) => {
+      this.postService.putFileToPostByPostId(post.id, this.selectedFile).subscribe((status) => {
+        if (status == 1) {
+          alert("This picture contains other stegonagraphy message!")
+        } else if (status == 2) {
+          alert("This picture picture from other user!!")
+        } else if (status == 0) {
+          this.router.navigate(['/']);
+        }
       })
+    });
   }
 
   private refreshPost(): void {

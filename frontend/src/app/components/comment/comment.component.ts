@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Comment} from "../../models/Comment";
 import {Post} from "../../models/Post";
 import {PostService} from "../../services/post.service";
-import {UserService} from "../../services/user.service";
+import {AuthenticationService} from "../../services/authentication.service";
 import {CommentService} from "../../services/comment.service";
 import {Subscription} from "rxjs";
 
@@ -19,7 +19,7 @@ export class CommentComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   constructor(private postService: PostService,
-              private userService: UserService,
+              private AuthenticationService: AuthenticationService,
               private commentService: CommentService) { }
 
   ngOnInit() {
@@ -37,7 +37,6 @@ export class CommentComponent implements OnInit {
   }
 
   private loadComment(): void {
-    debugger;
     this.subscriptions.push(this.commentService.getAllComment().subscribe(comments => {
       if(this.selectedPost){
         this.comments = comments.filter((comment: Comment) => comment.idPost === this.selectedPost.id);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../../services/user.service";
+import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
 import {User} from "../../models/User";
 
@@ -16,7 +16,7 @@ export class EntryComponent implements OnInit {
   sub: any;
   signInForm: FormGroup;
 
-  constructor(private  userService: UserService,
+  constructor(private authService: AuthenticationService,
               private router: Router) { }
 
   ngOnInit() {
@@ -43,17 +43,15 @@ export class EntryComponent implements OnInit {
   }
 
   signInClick() {
-    this.sub = this.userService.getUserByUsernameAndPassword(this.signInForm.controls['username'].value,this.signInForm.controls['password'].value).subscribe(value => {
+    this.sub = this.authService.authenticate(this.signInForm.controls['username'].value,this.signInForm.controls['password'].value).subscribe(value => {
 
-      this.userService.currUser = value as User;
-
-      if(this.userService.currUser !== null){
+      if(this.authService.currUser !== null){
         this.router.navigate(['/']);
       }else{
         this.errorMassage='Incorrect data. Recheck entered data'
       }
 
-      console.log(this.userService.currUser);
+      console.log(this.authService.currUser);
 
     });
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from "../../models/User";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../../services/user.service";
+import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -13,7 +13,7 @@ export class RegistrationComponent implements OnInit {
   user = new User();
   registrationForm: FormGroup;
 
-  constructor(private  userService: UserService,
+  constructor(private  AuthenticationService: AuthenticationService,
               private router: Router) { }
 
   ngOnInit() {
@@ -47,7 +47,7 @@ export class RegistrationComponent implements OnInit {
       idStatus:2,
     }
     console.log(this.user);
-    this.userService.saveUser(this.user).subscribe(user => {
+    this.AuthenticationService.saveUser(this.user).subscribe(user => {
         this.user = user as User;
         if(this.user!==null){
           console.log(user);

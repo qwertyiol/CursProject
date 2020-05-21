@@ -6,7 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {Complaint} from "../../models/Complaint";
 import {PostService} from "../../services/post.service";
-import {UserService} from "../../services/user.service";
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
   selector: 'app-complaint',
@@ -22,7 +22,7 @@ export class ComplaintComponent implements OnInit {
 
   constructor(private complaintService: ComplaintService,
               private postService: PostService,
-              private userService: UserService,
+              private AuthenticationService: AuthenticationService,
               private http: HttpClient,
               private router: Router) {
   }
@@ -30,7 +30,7 @@ export class ComplaintComponent implements OnInit {
   ngOnInit() {
     this.editableComplaint.dateComplaint = Date.now();
     this.editableComplaint.idPost = this.postService.currPost.id;
-    this.editableComplaint.idUser = this.userService.currUser.id;
+    this.editableComplaint.idUser = this.AuthenticationService.currUser.id;
     this.editableComplaint.idStatusComplaint =1;
   }
 

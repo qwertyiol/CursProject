@@ -6,7 +6,7 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import { AppComponent } from "./app.component";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import {Ng4LoadingSpinnerModule} from "ng4-loading-spinner";
 import {RouterModule, Routes} from "@angular/router";
 import { EntryComponent } from './components/entry/entry.component';
@@ -24,11 +24,12 @@ import { NewpostComponent } from './components/newpost/newpost.component';
 import {PostService} from "./services/post.service";
 import { ComplaintsforadminComponent } from './components/complaintsforadmin/complaintsforadmin.component';
 import { AdminComponent } from './components/admin/admin.component';
-import { UserService } from "./services/user.service";
 import {ComplaintService} from "./services/complaint.service";
 import {LikeService} from "./services/like.service";
 import {CommentService} from "./services/comment.service";
 import {SearchPipe} from "./pipes/search.pipe";
+import { AuthenticationService } from "./services/authentication.service";
+import { BasicAuthHtppInterceptorService } from "./interseptors/interceptor.service";
 
 const appRoutes: Routes = [
   {path: "", component: FeedComponent},
@@ -78,10 +79,15 @@ const appRoutes: Routes = [
   ],
   providers: [
     PostService,
-    UserService,
     ComplaintService,
     LikeService,
-    CommentService
+    CommentService,
+    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BasicAuthHtppInterceptorService,
+      multi: true
+    } 
   ],
   bootstrap: [AppComponent]
 })

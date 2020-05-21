@@ -1,7 +1,9 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpParams, HttpRequest} from "@angular/common/http";
+import {HttpClient, HttpParams, HttpRequest, HttpEvent} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Post} from "../models/Post";
+import {map, filter} from 'rxjs/operators';
+
 
 @Injectable()
 export class PostService {
@@ -34,14 +36,14 @@ export class PostService {
     return this.http.get<Post>('/api/post/' + id);
   }
 
-  putFileToPostByPostId(postId: number, file: File): Observable<any> {
+  putFileToPostByPostId(postId: number, file: File): Observable<number> {
     const formdata: FormData = new FormData();
     formdata.append('file', file);
     const req = new HttpRequest('POST', '/api/post/{id}/image'.replace('{id}', postId.toString()), formdata, {
       reportProgress: true,
       responseType: 'text'
     });
-    return this.http.request(req);
+    return this.http.request(req).pipe(map((resp: any) => resp.body), filter((resp: any)=> resp != null && resp != undefined));
   }
 }
 
