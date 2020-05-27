@@ -40,14 +40,14 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
+        UserEntity user =  userService.findByUsername(authenticationRequest.getUsername());
+        if(!user.getIsConfirm()) {
+            throw new Exception("USER_NOT_CONFIRMED");
+        }
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
-
         final String token = jwtTokenUtil.generateToken(userDetails);
-        UserEntity user =  userService.findByUsername(authenticationRequest.getUsername());
         return ResponseEntity.ok(new JwtResponse(token, user));
     }
 

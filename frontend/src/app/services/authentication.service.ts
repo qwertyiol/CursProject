@@ -19,17 +19,25 @@ export class AuthenticationService {
     }
 
     authenticate(username, password) {
-        return this.http.get<any>(`/api/user/authenticate?username=${username}&password=${password}`).pipe(
-            map(
-                userData => {
-                    sessionStorage.setItem('user', JSON.stringify(userData.user));
-                    let tokenStr = 'Bearer ' + userData.token;
-                    sessionStorage.setItem('token', tokenStr);
-                    return userData;
-                }
-            )
+        try {
+            return this.http.get<any>(`/api/user/authenticate?username=${username}&password=${password}`).pipe(
+                map(
+                    userData => {
+                        sessionStorage.removeItem('user');
+                        sessionStorage.removeItem('token');
+                        
+                        sessionStorage.setItem('user', JSON.stringify(userData.user));
+                        let tokenStr = 'Bearer ' + userData.token;
+                        sessionStorage.setItem('token', tokenStr);
+                        return userData;
+                    }
+                )
 
-        );
+            );
+        }
+        catch {
+            alert("User not found!");
+        }
     }
 
     isUserLoggedIn() {

@@ -11,4 +11,5 @@ public interface UserService {
     Optional<UserEntity> getUserById(Integer id);
     Iterable<UserEntity> getAllUser();
     void deleteUser(Integer id);
+    void SendEmail(String toEmail, String message);
 }

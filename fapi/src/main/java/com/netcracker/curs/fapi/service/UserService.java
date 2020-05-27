@@ -12,4 +12,5 @@ public interface UserService {
     User save(User user, HttpServletRequest request);
     void deleteUser(Integer id, HttpServletRequest request);
     JwtResponse authenticate(String userName, String password);
+    User confirmUser(String id);
 }

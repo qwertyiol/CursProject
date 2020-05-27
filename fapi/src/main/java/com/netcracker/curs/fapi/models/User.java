@@ -10,16 +10,18 @@ public class User {
     private String password;
     private int idRole;
     private int idStatus;
+    private String email;
 
     public User(){}
 
-    public User(int id, String username, String flName, String password, int idRole, int idStatus){
+    public User(int id, String username, String flName, String password, int idRole, int idStatus, String email) {
         this.id = id;
         this.username = username;
         this.flName = flName;
         this.password = password;
         this.idRole = idRole;
         this.idStatus = idStatus;
+        this.email = email;
     }
 
     public int getId() {
@@ -66,5 +68,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

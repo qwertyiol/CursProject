@@ -5,4 +5,5 @@ export class User {
   password: string;
   idRole: number;
   idStatus: number;
+  email: string;
 }

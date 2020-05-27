@@ -1,228 +1,113 @@
--- MySQL Workbench Forward Engineering
-
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema backend
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema backend
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `backend` DEFAULT CHARACTER SET utf8 ;
-USE `backend` ;
-
--- -----------------------------------------------------
--- Table `backend`.`post`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`post` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_user` INT(11) NULL DEFAULT NULL,
-  `file_path` VARCHAR(255) NULL DEFAULT NULL,
-  `date_post` DATE NULL DEFAULT NULL,
-  `text_post` VARCHAR(255) NULL DEFAULT NULL,
+CREATE DATABASE `backend` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE TABLE `comment_post` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL,
+  `tex` varchar(255) DEFAULT NULL,
+  `data_post` date DEFAULT NULL,
+  `id_post` int NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `id_user` (`id_user` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 75
-DEFAULT CHARACTER SET = utf8;
+  KEY `comment_post_ibfk_1_idx` (`id_post`),
+  KEY `comment_post_ibfk_2` (`id_user`),
+  CONSTRAINT `comment_post_ibfk_1` FOREIGN KEY (`id_post`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comment_post_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`user` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(45) NULL DEFAULT NULL,
-  `fl_name` VARCHAR(255) NULL DEFAULT NULL,
-  `password_user` VARCHAR(255) NULL DEFAULT NULL,
-  `id_role` INT(11) NULL DEFAULT NULL,
-  `id_status` INT(11) NULL DEFAULT NULL,
+CREATE TABLE `complaint` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_user` int DEFAULT NULL,
+  `date_complaimnt` date DEFAULT NULL,
+  `complaint` varchar(255) DEFAULT NULL,
+  `id_post` int NOT NULL,
+  `id_status_complaint` int NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `id_role` (`id_role` ASC) VISIBLE,
-  INDEX `id_status` (`id_status` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 8
-DEFAULT CHARACTER SET = utf8;
+  KEY `complaint_ibfk_3` (`id_status_complaint`),
+  KEY `complaint_ibfk_1` (`id_post`),
+  KEY `complaint_ibfk_2` (`id_user`),
+  CONSTRAINT `complaint_ibfk_1` FOREIGN KEY (`id_post`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `complaint_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `complaint_ibfk_3` FOREIGN KEY (`id_status_complaint`) REFERENCES `status_complaint` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`comment_post`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`comment_post` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_user` INT(11) NOT NULL,
-  `tex` VARCHAR(255) NULL DEFAULT NULL,
-  `data_post` DATE NULL DEFAULT NULL,
-  `id_post` INT(11) NOT NULL,
+CREATE TABLE `like_post` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL,
+  `id_post` int NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `comment_post_ibfk_1_idx` (`id_post` ASC) VISIBLE,
-  INDEX `comment_post_ibfk_2` (`id_user` ASC) VISIBLE,
-  CONSTRAINT `comment_post_ibfk_1`
-    FOREIGN KEY (`id_post`)
-    REFERENCES `backend`.`post` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `comment_post_ibfk_2`
-    FOREIGN KEY (`id_user`)
-    REFERENCES `backend`.`user` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 45
-DEFAULT CHARACTER SET = utf8;
+  KEY `like_post_ibfk_2` (`id_user`),
+  KEY `like_post_ibfk_1` (`id_post`),
+  CONSTRAINT `like_post_ibfk_1` FOREIGN KEY (`id_post`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `like_post_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`status_complaint`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`status_complaint` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `status_complaint` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `role_UNIQUE` (`status_complaint` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `backend`.`complaint`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`complaint` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_user` INT(11) NULL DEFAULT NULL,
-  `date_complaimnt` DATE NULL DEFAULT NULL,
-  `complaint` VARCHAR(255) NULL DEFAULT NULL,
-  `id_post` INT(11) NOT NULL,
-  `id_status_complaint` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `complaint_ibfk_3` (`id_status_complaint` ASC) VISIBLE,
-  INDEX `complaint_ibfk_1` (`id_post` ASC) VISIBLE,
-  INDEX `complaint_ibfk_2` (`id_user` ASC) VISIBLE,
-  CONSTRAINT `complaint_ibfk_1`
-    FOREIGN KEY (`id_post`)
-    REFERENCES `backend`.`post` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `complaint_ibfk_2`
-    FOREIGN KEY (`id_user`)
-    REFERENCES `backend`.`user` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `complaint_ibfk_3`
-    FOREIGN KEY (`id_status_complaint`)
-    REFERENCES `backend`.`status_complaint` (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 51
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `backend`.`hashtag`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`hashtag` (
-  `name` VARCHAR(45) NOT NULL,
+CREATE TABLE `hashtag` (
+  `name` varchar(45) NOT NULL,
   PRIMARY KEY (`name`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`like_post`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`like_post` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_user` INT(11) NOT NULL,
-  `id_post` INT(11) NOT NULL,
+CREATE TABLE `post` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_user` int DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `date_post` date DEFAULT NULL,
+  `text_post` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `like_post_ibfk_2` (`id_user` ASC) VISIBLE,
-  INDEX `like_post_ibfk_1` (`id_post` ASC) VISIBLE,
-  CONSTRAINT `like_post_ibfk_1`
-    FOREIGN KEY (`id_post`)
-    REFERENCES `backend`.`post` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `like_post_ibfk_2`
-    FOREIGN KEY (`id_user`)
-    REFERENCES `backend`.`user` (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 26
-DEFAULT CHARACTER SET = utf8;
+  KEY `id_user` (`id_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`post_hashtag`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`post_hashtag` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL DEFAULT NULL,
-  `id_post` INT(11) NULL DEFAULT NULL,
+CREATE TABLE `post_hashtag` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `id_post` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `name` (`name` ASC) VISIBLE,
-  INDEX `id_post` (`id_post` ASC) VISIBLE,
-  CONSTRAINT `post_hashtag_ibfk_1`
-    FOREIGN KEY (`name`)
-    REFERENCES `backend`.`hashtag` (`name`),
-  CONSTRAINT `post_hashtag_ibfk_2`
-    FOREIGN KEY (`id_post`)
-    REFERENCES `backend`.`post` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `name` (`name`),
+  KEY `id_post` (`id_post`),
+  CONSTRAINT `post_hashtag_ibfk_1` FOREIGN KEY (`name`) REFERENCES `hashtag` (`name`),
+  CONSTRAINT `post_hashtag_ibfk_2` FOREIGN KEY (`id_post`) REFERENCES `post` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`role_user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`role_user` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `role_user` VARCHAR(255) NULL DEFAULT NULL,
+CREATE TABLE `role_user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `role_UNIQUE` (`role_user` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8;
+  UNIQUE KEY `role_UNIQUE` (`role_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`status_user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`status_user` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `status_user` VARCHAR(255) NULL DEFAULT NULL,
+CREATE TABLE `status_user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `status_user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `status_UNIQUE` (`status_user` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8;
+  UNIQUE KEY `status_UNIQUE` (`status_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-
--- -----------------------------------------------------
--- Table `backend`.`subscriptions`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `backend`.`subscriptions` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_following` INT(11) NOT NULL,
-  `id_followers` INT(11) NOT NULL,
+CREATE TABLE `subscriptions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_following` int NOT NULL,
+  `id_followers` int NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `id_following` (`id_following` ASC) VISIBLE,
-  INDEX `id_followers` (`id_followers` ASC) VISIBLE,
-  CONSTRAINT `subscriptions_ibfk_1`
-    FOREIGN KEY (`id_following`)
-    REFERENCES `backend`.`user` (`id`),
-  CONSTRAINT `subscriptions_ibfk_2`
-    FOREIGN KEY (`id_followers`)
-    REFERENCES `backend`.`user` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `id_following` (`id_following`),
+  KEY `id_followers` (`id_followers`),
+  CONSTRAINT `subscriptions_ibfk_1` FOREIGN KEY (`id_following`) REFERENCES `user` (`id`),
+  CONSTRAINT `subscriptions_ibfk_2` FOREIGN KEY (`id_followers`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `status_complaint` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `status_complaint` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `role_UNIQUE` (`status_complaint`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) DEFAULT NULL,
+  `fl_name` varchar(255) DEFAULT NULL,
+  `password_user` varchar(255) DEFAULT NULL,
+  `id_role` int DEFAULT NULL,
+  `id_status` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  KEY `id_role` (`id_role`),
+  KEY `id_status` (`id_status`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+

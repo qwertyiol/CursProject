@@ -61,4 +61,10 @@ public class UserServiceImpl implements UserService {
         JwtRequest jwtRequest = new JwtRequest(userName, password);
         return restTemplate.postForEntity(backendServerUrl + "authenticate",jwtRequest, JwtResponse.class).getBody();
     }
+
+    @Override
+    public User confirmUser(String id) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl + "/api/user/confirm/id?id=" + id, User.class);
+    }
 }

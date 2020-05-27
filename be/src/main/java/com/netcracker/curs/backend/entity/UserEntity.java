@@ -10,6 +10,8 @@ public class UserEntity {
     private String username;
     private String flName;
     private String password;
+    private String email;
+    private boolean isConfirm;
     private RoleUserEntity roleUserByIdRole;
     private StatusUserEntity statusUserByIdStatus;
 
@@ -52,6 +54,26 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Basic
+    @Column(name = "is_confirm")
+    public boolean getIsConfirm() {
+        return isConfirm;
+    }
+
+    public void setIsConfirm(boolean isConfirm) {
+        this.isConfirm = isConfirm;
     }
 
     @Override
